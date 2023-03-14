@@ -3,7 +3,7 @@
     Index Entry
 
 */
-import { userListTmpl, userListTmplEmail } from "./templates.js";
+import { userListTmpl, userListTmplEmail, userListTmplTable } from "./templates.js";
 import navigation from "./navigation.js";
 navigation.init();
 
@@ -63,7 +63,6 @@ if( userCreateForm )
 
 }
 
-
 /* 
 
     Læser Brugere
@@ -83,17 +82,13 @@ if(userListContainer) {
     .then((response) => {
 
         let userList = response.userlist;
-        userListContainer.innerHTML = '';
-
+      
         userList.forEach( (user ) => {
 
-            console.log(user.name)
-            userListContainer.innerHTML += userListTmplEmail(user)
+            userListContainer.innerHTML += userListTmplTable(user)
 
         });
-
-      console.log("Success:", response.userlist);
-      
+        
     })
     .catch((error) => {
       console.log("Error:", error);
@@ -140,4 +135,76 @@ const onUserDeleteFormSubmit = (e) => {
 if(userDeleteForm) {
 
     userDeleteForm.addEventListener('submit', onUserDeleteFormSubmit);
+  
+}
+
+/* 
+
+  Opdater Bruger
+
+*/
+const userUpdateForm = document.querySelector('#userUpdateForm');
+
+const onUserUpdateFormSubmit = (e) => {
+   //forhindre formen i at sende.
+  e.preventDefault();
+
+  const {name, username, email, uid, age, member} = e.target.elements;
+
+  let user = {
+      id : uid.value,
+      username : username.value,
+      name : name.value,
+      email : email.value,
+      age: age.value,
+      member: member.checked
+  }
+
+  fetch("http://localhost:3000/users", {
+    method: "PUT", // or 'PUT'
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(user),
+  })  
+  .then((response) => response.json())
+  .then((response) => {
+    console.log("Success:", response);
+
+    // window.location.href = '/users/read.html'
+
+  })
+  .catch((error) => {
+    console.log("Error:", error);
+  });
+
+}
+
+if(userUpdateForm) {
+
+  let searchParams = new URLSearchParams(location.search);
+  console.log('ID fra URL', searchParams.get('id'));
+
+  let userId = searchParams.get('id');
+
+  fetch("http://localhost:3000/users/" + userId)  
+  .then((response) => response.json())
+  .then((response) => {
+
+    const {name, username, email, password, age, member, _id} = response.user;
+    const form = userUpdateForm.elements;
+
+    form.uid.value = _id;
+    form.name.value = name;
+    form.username.value = username;
+    form.email.value = email;
+    form.age.value = age;
+    form.member.checked = member;
+
+  })
+  .catch((error) => {
+    console.log("Error:", error);
+  });
+
+  userUpdateForm.addEventListener('submit', onUserUpdateFormSubmit);
 }

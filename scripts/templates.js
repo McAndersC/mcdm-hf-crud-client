@@ -9,3 +9,12 @@ export const userListTmplEmail = (user) => `<div class="list-item">
     <span>${user.username}</span>
     <span>${user.email}</span>
 </div>`;
+
+export const userListTmplTable = (user) => `<tr>
+    <td>${user.name}</td>
+    <td>${user.username}</td>
+    <td>${user.email}</td>
+    <td>${user.age}</td>
+    <td>${user.member}</td>
+    <td><a href="/users/update.html?id=${user._id}">Update</a></td>
+</tr>`;
