@@ -124,6 +124,7 @@ const onUserDeleteFormSubmit = (e) => {
     .then((response) => response.json())
     .then((response) => {
       console.log("Success:", response);
+      location.href = './read.html'
     })
     .catch((error) => {
       console.log("Error:", error);
@@ -133,6 +134,34 @@ const onUserDeleteFormSubmit = (e) => {
 
 
 if(userDeleteForm) {
+
+  let searchParams = new URLSearchParams(location.search);
+  let userId = searchParams.get('id');
+
+  if(userId) {
+
+    console.log(userId)
+    
+    fetch("http://localhost:3000/users/" + userId)  
+    .then((response) => response.json())
+    .then((response) => {
+
+      if(Object.keys(response.user).length !== 0)
+      {
+        // console.log('response', Object.keys(response.user))
+        const {email} = response.user;
+        const form = userDeleteForm.elements;
+
+        form.email.value = email;
+      }
+
+      
+
+    })
+    .catch((error) => {
+      console.log("Error:", error);
+    });
+  }
 
     userDeleteForm.addEventListener('submit', onUserDeleteFormSubmit);
   
