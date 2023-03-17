@@ -11,6 +11,14 @@ export const userListTmplEmail = (user) => `<div class="list-item">
 </div>`;
 
 export const userListTmplTable = (user) => `<tr>
+    <td>
+        <form id="userProfileForm">
+            <label>
+            <img src="http://localhost:3000/images/${user.profile}" class="list-profile" alt="profile image" width="150px"/>
+                <input type="file" class="inpFile" name="profile" data-id="${user._id}"/>
+            </label>
+        </form>
+    </td>
     <td>${user.name}</td>
     <td>${user.username}</td>
     <td>${user.email}</td>

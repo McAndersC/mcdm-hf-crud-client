@@ -62,6 +62,44 @@ if( userCreateForm )
     userCreateForm.addEventListener('submit', onUserCreateFormSubmit);
 
 }
+/*
+
+  Tilføj profil billede
+
+*/
+
+const onProfileFormSubmit = (e) => {
+
+    e.preventDefault();
+
+    console.log('FILE: ', e.target)
+    console.log('ID: ', e.target.dataset.id)
+
+    const profile = e.target;
+    const id = e.target.dataset.id
+  
+    console.log(profile, id)
+
+    const formData = new FormData();
+    formData.append('id', id);
+    formData.append('profile', profile.files[0]);
+
+    console.log(formData)
+
+    fetch('http://localhost:3000/users/profile', {
+      method : 'POST',
+      body: formData
+    })
+    .then( (response) => response.json() )
+    .then( (response) => {
+
+      console.log('RE', response);
+      location.reload();
+
+    }).catch( (err) => console.log(err))
+
+
+}
 
 /* 
 
@@ -88,6 +126,14 @@ if(userListContainer) {
             userListContainer.innerHTML += userListTmplTable(user)
 
         });
+
+        const profileForms = document.querySelectorAll('#userProfileForm');
+        profileForms.forEach( (profileForm) => {
+
+          profileForm.addEventListener('change', onProfileFormSubmit);
+
+        })
+       
         
     })
     .catch((error) => {
