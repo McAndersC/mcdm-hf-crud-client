@@ -77,9 +77,7 @@ const onProfileFormSubmit = (e) => {
 
     const profile = e.target;
     const id = e.target.dataset.id
-  
-    console.log(profile, id)
-
+ 
     const formData = new FormData();
     formData.append('id', id);
     formData.append('profile', profile.files[0]);
