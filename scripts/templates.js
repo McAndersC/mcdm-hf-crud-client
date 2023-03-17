@@ -16,5 +16,9 @@ export const userListTmplTable = (user) => `<tr>
     <td>${user.email}</td>
     <td>${user.age}</td>
     <td>${user.member}</td>
-    <td><a href="/users/update.html?id=${user._id}">Update</a></td>
+    <td>
+        <a href="/users/update.html?id=${user._id}">Update</a>
+        <a href="/users/delete.html?id=${user._id}">Delete</a>
+    
+    </td>
 </tr>`;

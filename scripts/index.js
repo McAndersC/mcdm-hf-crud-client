@@ -183,28 +183,37 @@ const onUserUpdateFormSubmit = (e) => {
 if(userUpdateForm) {
 
   let searchParams = new URLSearchParams(location.search);
-  console.log('ID fra URL', searchParams.get('id'));
-
   let userId = searchParams.get('id');
 
-  fetch("http://localhost:3000/users/" + userId)  
-  .then((response) => response.json())
-  .then((response) => {
+  if(userId) {
 
-    const {name, username, email, password, age, member, _id} = response.user;
-    const form = userUpdateForm.elements;
+    console.log(userId)
+    
+    fetch("http://localhost:3000/users/" + userId)  
+    .then((response) => response.json())
+    .then((response) => {
 
-    form.uid.value = _id;
-    form.name.value = name;
-    form.username.value = username;
-    form.email.value = email;
-    form.age.value = age;
-    form.member.checked = member;
+      if(Object.keys(response.user).length !== 0)
+      {
+        // console.log('response', Object.keys(response.user))
+        const {name, username, email, password, age, member, _id} = response.user;
+        const form = userUpdateForm.elements;
 
-  })
-  .catch((error) => {
-    console.log("Error:", error);
-  });
+        form.uid.value = _id;
+        form.name.value = name;
+        form.username.value = username;
+        form.email.value = email;
+        form.age.value = age;
+        form.member.checked = member;
+      }
+
+
+    })
+    .catch((error) => {
+      console.log("Error:", error);
+    });
+  }
 
   userUpdateForm.addEventListener('submit', onUserUpdateFormSubmit);
+
 }
